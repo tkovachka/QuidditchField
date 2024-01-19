@@ -1,8 +1,8 @@
 #include <Camera.hpp>
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
-        : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED),
-          MouseSensitivity(SENSITIVITY), Zoom(ZOOM), isHumanWalking(true) {
+        : Front(glm::vec3(0.0f, 5.0f, -1.0f)), MovementSpeed(SPEED),
+          MouseSensitivity(SENSITIVITY), Zoom(ZOOM) {
     Position = position;
     WorldUp = up;
     Yaw = yaw;
@@ -13,8 +13,8 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
 // Constructor with scalar values
 Camera::Camera(float posX, float posY, float posZ, float upX, float upY,
                float upZ, float yaw, float pitch)
-        : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED),
-          MouseSensitivity(SENSITIVITY), Zoom(ZOOM), isHumanWalking(true) {
+        : Front(glm::vec3(0.0f, 5.0f, -1.0f)), MovementSpeed(SPEED),
+          MouseSensitivity(SENSITIVITY), Zoom(ZOOM) {
     Position = glm::vec3(posX, posY, posZ);
     WorldUp = glm::vec3(upX, upY, upZ);
     Yaw = yaw;
@@ -30,26 +30,46 @@ glm::mat4 Camera::GetViewMatrix() {
 // Processes input received from any keyboard-like input system. Accepts input
 // parameter in the form of camera defined ENUM (to abstract it from windowing
 // systems)
-void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
+void Camera::ProcessKeyboard(Camera_Mode mode, Camera_Movement direction, float deltaTime) {
     float velocity = MovementSpeed * deltaTime;
 
-    if (isHumanWalking) {
-        if (direction == FORWARD)
-            Position += Front * velocity;
-        if (direction == BACKWARD)
-            Position -= Front * velocity;
-        if (direction == LEFT || direction == RIGHT)
-            Position += Right * velocity;
-    } else {
-        if (direction == FORWARD)
-            Position += Front * velocity;
-        if (direction == BACKWARD)
-            Position -= Front * velocity;
-        if (direction == LEFT)
-            Position -= Right * velocity;
-        if (direction == RIGHT)
-            Position += Right * velocity;
+    switch (mode) {
+        case HUMAN_WALKING:
+            switch (direction) {
+                case FORWARD:
+                    Position += glm::vec3(glm::cos(glm::radians(Yaw)), 5, glm::sin(glm::radians(Yaw))) *
+                                velocity; //Y is not affected, Y is looking up
+                    break;
+                case BACKWARD:
+                    Position -= glm::vec3(glm::cos(glm::radians(Yaw)), 5, glm::sin(glm::radians(Yaw))) *
+                                velocity; //Y is not affected, Y is looking up
+                    break;
+                case LEFT:
+                    Position -= Right * velocity;
+                    break;
+                case RIGHT:
+                    Position += Right * velocity;
+                    break;
+            }
+            break;
+        case FLYING:
+            switch (direction) {
+                case FORWARD:
+                    Position += Front * velocity;
+                    break;
+                case BACKWARD:
+                    Position -= Front * velocity;
+                    break;
+                case LEFT:
+                    Position -= Right * velocity;
+                    break;
+                case RIGHT:
+                    Position += Right * velocity;
+                    break;
+            }
+            break;
     }
+    updateCameraVectors();
 }
 
 // Processes input received from a mouse input system. Expects the offset
@@ -69,10 +89,7 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset,
         if (Pitch < -89.0f)
             Pitch = -89.0f;
     }
-    if (isHumanWalking) {
-        Pitch = 0.0f;
-        Yaw = -90.0f;
-    }
+
     // Update Front, Right and Up Vectors using the updated Euler angles
     updateCameraVectors();
 }
@@ -89,7 +106,7 @@ void Camera::ProcessMouseScroll(float yoffset) {
 }
 
 void Camera::ToggleFlightMode() {
-    isHumanWalking = !isHumanWalking;
+    mode = (mode == HUMAN_WALKING) ? FLYING : HUMAN_WALKING;
 }
 
 // Calculates the front vector from the Camera's (updated) Euler Angles
