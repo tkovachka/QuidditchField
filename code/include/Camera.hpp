@@ -60,9 +60,11 @@ public:
   // Processes input received from a mouse scroll-wheel event. Only requires
   // input on the vertical wheel-axis
   void ProcessMouseScroll(float yoffset);
+  void ToggleFlightMode();
 
 private:
   // Calculates the front vector from the Camera's (updated) Euler Angles
   void updateCameraVectors();
+  bool isHumanWalking;
 };
 #endif //CAMERA_H

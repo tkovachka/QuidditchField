@@ -44,7 +44,6 @@ void Model::load_model()
                     bool load_success = false;
                     unsigned int texture_handle = load_texture_image(string.C_Str(), load_success);
 
-                    //fixme load_success function
                     if (load_success) // Although do nothing if the image fails to load.
                     {
                         Texture texture;
@@ -85,7 +84,6 @@ void Model::load_model()
                     tex_coords.x = mesh->mTextureCoords[0][i2].x;
                     tex_coords.y = mesh->mTextureCoords[0][i2].y;
                     mesh_list[i].tex_coords.push_back(tex_coords);
-                    std::cout << "Texture Coordinates: (" << tex_coords.x << ", " << tex_coords.y << ")\n";
                 }
                 else
                     mesh_list[i].tex_coords.push_back(glm::vec2(0.0f, 0.0f));

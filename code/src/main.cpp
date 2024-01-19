@@ -9,7 +9,7 @@
 #include <iostream>
 #include <string>
 
-const std::string program_name = ("Camera");
+const std::string program_name = ("QuidditchField");
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
@@ -106,7 +106,7 @@ int main() {
     unsigned int animate_loc = glGetUniformLocation(ourShader.ID, "animate");
 
     //todo fix .mtl file with correct materials
-    Model object("../res/objects/final_field.obj");
+    Model object("../res/objects/field_better.obj");
     glActiveTexture(GL_TEXTURE0); // Reusing the same texture unit for each model mesh.
     unsigned int image_sampler_loc = glGetUniformLocation(ourShader.ID, "image");
     glUniform1i(image_sampler_loc, 0);
@@ -166,6 +166,8 @@ void processInput(GLFWwindow *window) {
         camera.ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.ProcessKeyboard(RIGHT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
+        camera.ToggleFlightMode();
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback
