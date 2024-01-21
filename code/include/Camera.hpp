@@ -40,7 +40,7 @@ public:
     float MovementSpeed;
     float MouseSensitivity;
     float Zoom;
-    Camera_Mode mode = HUMAN_WALKING;
+    Camera_Mode mode;
 
     // Constructor with vectors
     Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f),

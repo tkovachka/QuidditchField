@@ -1,24 +1,26 @@
 #include <Camera.hpp>
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
-        : Front(glm::vec3(0.0f, 5.0f, -1.0f)), MovementSpeed(SPEED),
+        : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED),
           MouseSensitivity(SENSITIVITY), Zoom(ZOOM) {
     Position = position;
     WorldUp = up;
     Yaw = yaw;
     Pitch = pitch;
+    mode = HUMAN_WALKING;
     updateCameraVectors();
 }
 
 // Constructor with scalar values
 Camera::Camera(float posX, float posY, float posZ, float upX, float upY,
                float upZ, float yaw, float pitch)
-        : Front(glm::vec3(0.0f, 5.0f, -1.0f)), MovementSpeed(SPEED),
+        : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED),
           MouseSensitivity(SENSITIVITY), Zoom(ZOOM) {
     Position = glm::vec3(posX, posY, posZ);
     WorldUp = glm::vec3(upX, upY, upZ);
     Yaw = yaw;
     Pitch = pitch;
+    mode = HUMAN_WALKING;
     updateCameraVectors();
 }
 
@@ -37,11 +39,11 @@ void Camera::ProcessKeyboard(Camera_Mode mode, Camera_Movement direction, float 
         case HUMAN_WALKING:
             switch (direction) {
                 case FORWARD:
-                    Position += glm::vec3(glm::cos(glm::radians(Yaw)), 5, glm::sin(glm::radians(Yaw))) *
+                    Position += glm::vec3(glm::cos(glm::radians(Yaw)), 0, glm::sin(glm::radians(Yaw))) *
                                 velocity; //Y is not affected, Y is looking up
                     break;
                 case BACKWARD:
-                    Position -= glm::vec3(glm::cos(glm::radians(Yaw)), 5, glm::sin(glm::radians(Yaw))) *
+                    Position -= glm::vec3(glm::cos(glm::radians(Yaw)), 0, glm::sin(glm::radians(Yaw))) *
                                 velocity; //Y is not affected, Y is looking up
                     break;
                 case LEFT:

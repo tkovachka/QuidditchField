@@ -35,9 +35,6 @@ Shader::Shader(const char *vert_path, const char *frag_path) {
         std::cout << "ERROR!... File: " << frag_path << " could not be opened.\n\n";
 
 
-    std::cout << vert_string << "\n\n"; // Output the shader files to display in the console window.
-    std::cout << frag_string << "\n\n";
-
     const char *vert_pointer = vert_string.c_str();
     const char *frag_pointer = frag_string.c_str();
 

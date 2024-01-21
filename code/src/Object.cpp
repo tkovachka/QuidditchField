@@ -154,7 +154,6 @@ unsigned int Model::load_texture_image(std::string file_name, bool &load_complet
 
         load_complete = true;
         stbi_image_free(image_data);
-        std::cout << "   Image loaded OK: " << file_name << "\n";
     } else {
         load_complete = false;
         stbi_image_free(image_data);
