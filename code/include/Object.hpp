@@ -11,7 +11,7 @@
 #include<glad/glad.h>
 #include<vector>
 
-class Model {
+class Object {
 private:
     Assimp::Importer importer;
     const aiScene *scene = nullptr;
@@ -41,7 +41,7 @@ public:
     std::vector<Mesh> mesh_list;
     std::vector<Texture> texture_list;
 
-    Model(const char *model_path);
+    Object(const char *model_path);
 
     int is_image_loaded(std::string file_name);
 

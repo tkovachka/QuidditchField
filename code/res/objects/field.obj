@@ -1,6 +1,6 @@
 # Blender 4.0.2
 # www.blender.org
-mtllib field_better.mtl
+mtllib field.mtl
 o Cone
 v 35.351204 19.870750 -20.146828
 v 30.658949 19.870750 -23.306374

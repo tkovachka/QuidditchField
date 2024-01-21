@@ -3,13 +3,13 @@
 #include <stb_image.h>
 #include<Object.hpp>
 
-Model::Model(const char *model_path) {
-    scene = Model::importer.ReadFile(model_path,
+Object::Object(const char *model_path) {
+    scene = Object::importer.ReadFile(model_path,
                                      aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_FlipUVs);
     load_model();
 }
 
-void Model::load_model()
+void Object::load_model()
 {
     if (!scene || !scene->mRootNode || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE)
         std::cout << "Assimp importer.ReadFile (Error) -- " << importer.GetErrorString() << "\n";
@@ -57,6 +57,7 @@ void Model::load_model()
                 else
                     mesh_list[i].tex_handle = already_loaded; // Assign existing texture handle.
             }
+
             // (3) Loop through all mesh [i]'s vertices
             // ---------------------------------------------------
             for (unsigned int i2 = 0; i2 < mesh->mNumVertices; ++i2)
@@ -94,14 +95,14 @@ void Model::load_model()
                 for (unsigned int i4 = 0; i4 < mesh->mFaces[i3].mNumIndices; ++i4)
                     mesh_list[i].vert_indices.push_back(mesh->mFaces[i3].mIndices[i4] + indices_offset);
 
-            // indices_offset += mesh->mNumVertices; // Disabled for tutorial: Model Loading (Part 1 of 3)
+            // indices_offset += mesh->mNumVertices; // Disabled for tutorial: Object Loading (Part 1 of 3)
 
             set_buffer_data(i); // Set up: VAO, VBO and EBO.
         }
     }
 }
 
-int Model::is_image_loaded(std::string file_name) {
+int Object::is_image_loaded(std::string file_name) {
     for (unsigned int i = 0; i < texture_list.size(); ++i)
         if (file_name.compare(texture_list[i].image_name) == 0)
             return texture_list[i].textureID;
@@ -109,7 +110,7 @@ int Model::is_image_loaded(std::string file_name) {
 }
 
 
-unsigned int Model::load_texture_image(std::string file_name, bool &load_complete) {
+unsigned int Object::load_texture_image(std::string file_name, bool &load_complete) {
     // stbi_set_flip_vertically_on_load(1); // Call this function if the image is upside-down.
 
     std::size_t position = file_name.find_last_of("\\");
@@ -162,7 +163,7 @@ unsigned int Model::load_texture_image(std::string file_name, bool &load_complet
     return textureID;
 }
 
-void Model::set_buffer_data(unsigned int index)
+void Object::set_buffer_data(unsigned int index)
 {
     glGenVertexArrays(1, &mesh_list[index].VAO);
     glGenBuffers(1, &mesh_list[index].VBO1); // Alternative to using 3 separate VBOs, instead use only 1 VBO and set glVertexAttribPointer's offset...
