@@ -106,7 +106,7 @@ int main() {
     unsigned int animate_loc = glGetUniformLocation(ourShader.ID, "animate");
 
     //todo fix .mtl file with correct materials
-    Model object("../res/objects/field_better.obj");
+    Model object("../res/objects/field.obj");
     glActiveTexture(GL_TEXTURE0); // Reusing the same texture unit for each model mesh.
     unsigned int image_sampler_loc = glGetUniformLocation(ourShader.ID, "image");
     glUniform1i(image_sampler_loc, 0);
